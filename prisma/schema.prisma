@@ -1,0 +1,83 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model cat_especies {
+  especie_id     Int              @id @default(autoincrement())
+  nombre         String           @unique @db.VarChar(50)
+  cat_variedades cat_variedades[]
+}
+
+model cat_origenes {
+  origen_id     Int             @id @default(autoincrement())
+  nombre        String          @unique @db.VarChar(50)
+  cat_productos cat_productos[]
+}
+
+model cat_presentaciones {
+  presentacion_id Int             @id @default(autoincrement())
+  nombre          String          @unique(map: "uq_cat_presentaciones") @db.VarChar(50)
+  cat_productos   cat_productos[]
+}
+
+model cat_productos {
+  producto_id        Int                @id @default(autoincrement())
+  kilos              Decimal?           @db.Decimal(18, 2)
+  variedad_id        Int
+  origen_id          Int?
+  presentacion_id    Int
+  cat_origenes       cat_origenes?      @relation(fields: [origen_id], references: [origen_id], onDelete: NoAction, onUpdate: NoAction)
+  cat_presentaciones cat_presentaciones @relation(fields: [presentacion_id], references: [presentacion_id], onDelete: NoAction, onUpdate: NoAction)
+  cat_variedades     cat_variedades     @relation(fields: [variedad_id], references: [variedad_id], onDelete: NoAction, onUpdate: NoAction)
+  preciosdiarios     preciosdiarios[]
+
+  @@unique([presentacion_id, origen_id, variedad_id, kilos])
+}
+
+model cat_variedades {
+  variedad_id   Int             @id @default(autoincrement())
+  nombre        String?         @db.VarChar(50)
+  especie_id    Int
+  cat_productos cat_productos[]
+  cat_especies  cat_especies    @relation(fields: [especie_id], references: [especie_id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@unique([especie_id, nombre], map: "uq_cat_variedades_especie_nombre")
+}
+
+model preciosdiarios {
+  precio_id             Int           @id @default(autoincrement())
+  producto_id           Int
+  fecha                 DateTime      @db.Date
+  precio_mayorista      Decimal?      @db.Decimal(18, 2)
+  precio_minorista      Decimal?      @db.Decimal(18, 2)
+  precio_modal          Decimal?      @db.Decimal(18, 2)
+  precio_mayorista_x_kg Decimal?      @db.Decimal(18, 2)
+  precio_minorista_x_kg Decimal?      @db.Decimal(18, 2)
+  precio_modal_x_kg     Decimal?      @db.Decimal(18, 2)
+  cat_productos         cat_productos @relation(fields: [producto_id], references: [producto_id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@unique([producto_id, fecha])
+}
+
+model temp {
+  temp_id               Int       @id @default(autoincrement())
+  fecha                 DateTime? @db.Date
+  especie               String?   @db.VarChar(50)
+  variedad              String?   @db.VarChar(50)
+  origen                String?   @db.VarChar(50)
+  envase                String?   @db.VarChar(50)
+  kilos                 Decimal?  @db.Decimal(18, 0)
+  calibre               String?   @db.VarChar(50)
+  tamano                String?   @db.VarChar(50)
+  precio_mayorista      Decimal?  @db.Decimal(18, 2)
+  precio_modal          Decimal?  @db.Decimal(18, 2)
+  precio_minorista      Decimal?  @db.Decimal(18, 2)
+  precio_mayorista_x_kg Decimal?  @db.Decimal(18, 2)
+  precio_modal_x_kg     Decimal?  @db.Decimal(18, 2)
+  precio_minorista_x_kg Decimal?  @db.Decimal(18, 2)
+}
