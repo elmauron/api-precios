@@ -9,10 +9,12 @@ export class PreciosService {
         especie,
         fecha,
         origen,
+        limit,
     }: {
         especie?: string;
         fecha?: string;
         origen?: string;
+        limit?: number;
     }) {
         // Filtro general
         const where: any = {};
@@ -61,6 +63,7 @@ export class PreciosService {
         const precios = await this.prisma.preciosdiarios.findMany({
             where,
             orderBy: { fecha: 'desc' },
+            take: limit,
             include: {
                 cat_productos: {
                     include: {

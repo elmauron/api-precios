@@ -10,8 +10,9 @@ export class PreciosController {
         @Query('especie') especie?: string,
         @Query('fecha') fecha?: string,
         @Query('origen') origen?: string,
+        @Query('limit') limit?: string
     ) {
-        return this.preciosService.getAllFiltrado({ especie, fecha, origen });
+        return this.preciosService.getAllFiltrado({ especie, fecha, origen, limit: limit ? parseInt(limit) : undefined });
     }
 
     @Get('por-especie')
