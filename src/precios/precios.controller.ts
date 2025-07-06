@@ -15,14 +15,14 @@ export class PreciosController {
         return this.preciosService.getAllFiltrado({ especie, fecha, origen, limit: limit ? parseInt(limit) : undefined });
     }
 
-    @Get('por-especie')
-    getAllByEspecie(@Query('especie') especie: string) {
-        return this.preciosService.getAllPreciosByEspecie(especie);
-    }
-
-    @Get('por-fecha')
-    getAllByFecha(@Query('fecha') fecha: string) {
-        return this.preciosService.getAllPreciosByFecha(fecha);
+    @Get('xkg')
+    getFiltradoXKg(
+        @Query('especie') especie?: string,
+        @Query('fecha') fecha?: string,
+        @Query('origen') origen?: string,
+        @Query('limit') limit?: string
+    ) {
+        return this.preciosService.getAllFiltradoXKg({ especie, fecha, origen, limit: limit ? parseInt(limit) : undefined });
     }
 
 }
