@@ -8,9 +8,10 @@ datasource db {
 }
 
 model cat_especies {
-  especie_id     Int              @id @default(autoincrement())
-  nombre         String           @unique @db.VarChar(50)
-  cat_variedades cat_variedades[]
+  especie_id             Int                      @id @default(autoincrement())
+  nombre                 String                   @unique @db.VarChar(50)
+  cat_variedades         cat_variedades[]
+  preciospromedioespecie preciospromedioespecie[]
 }
 
 model cat_origenes {
@@ -40,11 +41,12 @@ model cat_productos {
 }
 
 model cat_variedades {
-  variedad_id   Int             @id @default(autoincrement())
-  nombre        String?         @db.VarChar(50)
-  especie_id    Int
-  cat_productos cat_productos[]
-  cat_especies  cat_especies    @relation(fields: [especie_id], references: [especie_id], onDelete: NoAction, onUpdate: NoAction)
+  variedad_id             Int                       @id @default(autoincrement())
+  nombre                  String?                   @db.VarChar(50)
+  especie_id              Int
+  cat_productos           cat_productos[]
+  cat_especies            cat_especies              @relation(fields: [especie_id], references: [especie_id], onDelete: NoAction, onUpdate: NoAction)
+  preciospromediovariedad preciospromediovariedad[]
 
   @@unique([especie_id, nombre], map: "uq_cat_variedades_especie_nombre")
 }
@@ -80,4 +82,22 @@ model temp {
   precio_mayorista_x_kg Decimal?  @db.Decimal(18, 2)
   precio_modal_x_kg     Decimal?  @db.Decimal(18, 2)
   precio_minorista_x_kg Decimal?  @db.Decimal(18, 2)
+}
+
+model preciospromedioespecie {
+  promedio_id          Int          @id @default(autoincrement())
+  especie_id           Int
+  fecha                DateTime     @db.Date
+  precio_promedio      Decimal?     @db.Decimal(18, 2)
+  precio_promedio_x_kg Decimal?     @db.Decimal(18, 2)
+  cat_especies         cat_especies @relation(fields: [especie_id], references: [especie_id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model preciospromediovariedad {
+  promedio_var_id          Int            @id @default(autoincrement())
+  variedad_id              Int
+  fecha                    DateTime       @db.Date
+  precio_promedio_var      Decimal?       @db.Decimal(18, 2)
+  precio_promedio_var_x_kg Decimal?       @db.Decimal(18, 2)
+  cat_variedades           cat_variedades @relation(fields: [variedad_id], references: [variedad_id], onDelete: NoAction, onUpdate: NoAction)
 }

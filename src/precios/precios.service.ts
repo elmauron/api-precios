@@ -23,14 +23,26 @@ export class PreciosService {
         const productoFilter: Record<string, any> = {};
 
         if (especie) {
-            productoFilter.cat_variedades = {
-                cat_especies: {
-                    nombre: {
-                        equals: especie,
-                        mode: 'insensitive',
+            const parsedId = Number(especie);
+
+            if (!isNaN(parsedId)) {
+                // Si es un número, filtro por ID
+                productoFilter.cat_variedades = {
+                    cat_especies: {
+                        especie_id: parsedId,
                     },
-                },
-            };
+                };
+            } else {
+                // Si no es un número, asumo que es el nombre
+                productoFilter.cat_variedades = {
+                    cat_especies: {
+                        nombre: {
+                            equals: especie,
+                            mode: 'insensitive',
+                        },
+                    },
+                };
+            }
         }
 
         if (origen) {
