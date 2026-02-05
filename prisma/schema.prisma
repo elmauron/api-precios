@@ -66,24 +66,6 @@ model preciosdiarios {
   @@unique([producto_id, fecha])
 }
 
-model temp {
-  temp_id               Int       @id @default(autoincrement())
-  fecha                 DateTime? @db.Date
-  especie               String?   @db.VarChar(50)
-  variedad              String?   @db.VarChar(50)
-  origen                String?   @db.VarChar(50)
-  envase                String?   @db.VarChar(50)
-  kilos                 Decimal?  @db.Decimal(18, 0)
-  calibre               String?   @db.VarChar(50)
-  tamano                String?   @db.VarChar(50)
-  precio_mayorista      Decimal?  @db.Decimal(18, 2)
-  precio_modal          Decimal?  @db.Decimal(18, 2)
-  precio_minorista      Decimal?  @db.Decimal(18, 2)
-  precio_mayorista_x_kg Decimal?  @db.Decimal(18, 2)
-  precio_modal_x_kg     Decimal?  @db.Decimal(18, 2)
-  precio_minorista_x_kg Decimal?  @db.Decimal(18, 2)
-}
-
 model preciospromedioespecie {
   promedio_id          Int          @id @default(autoincrement())
   especie_id           Int
@@ -100,4 +82,22 @@ model preciospromediovariedad {
   precio_promedio_var      Decimal?       @db.Decimal(18, 2)
   precio_promedio_var_x_kg Decimal?       @db.Decimal(18, 2)
   cat_variedades           cat_variedades @relation(fields: [variedad_id], references: [variedad_id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model temp {
+  temp_id               Int       @id @default(autoincrement())
+  fecha                 DateTime? @db.Date
+  especie               String?   @db.VarChar(50)
+  variedad              String?   @db.VarChar(50)
+  origen                String?   @db.VarChar(50)
+  envase                String?   @db.VarChar(50)
+  kilos                 Decimal?  @db.Decimal(18, 0)
+  calidad               String?   @db.VarChar(50)
+  tamano                String?   @db.VarChar(50)
+  precio_mayorista      Decimal?  @db.Decimal(18, 2)
+  precio_modal          Decimal?  @db.Decimal(18, 2)
+  precio_minorista      Decimal?  @db.Decimal(18, 2)
+  precio_mayorista_x_kg Decimal?  @db.Decimal(18, 2)
+  precio_modal_x_kg     Decimal?  @db.Decimal(18, 2)
+  precio_minorista_x_kg Decimal?  @db.Decimal(18, 2)
 }
